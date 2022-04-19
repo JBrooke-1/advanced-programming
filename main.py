@@ -3,34 +3,49 @@ STEP1: load the initial data set
 which consists of three CSV files 
 and translate it into JSON format
 """
+import matplotlib.pyplot as plt
+from os import path, mkdir
 import pandas as pd
+import db
+import os
+from pathlib import Path
 
-airport_df = pd.read_csv("./data/airports.csv")
-airport_frequencies_df = pd.read_csv("./data/airport-frequencies.csv")
-runways_df = pd.read_csv("./data/runways.csv")
+
+def read_csv_files(d_path="./data"):
+    dfs_only = []
+    dfs_dict = {}
+    if os.path.isdir(d_path):
+        dirs = [os.path.join(d_path, f) for f in os.listdir(d_path)]
+        print(dirs)
+        for file in dirs:
+            if file.endswith('.csv'):
+                val = pd.read_csv(file)
+                dfs_only.append(val)
+                key = Path(file).stem
+                dfs_dict[key]=val
+        return pd.concat(dfs_only), dfs_dict
+
+
+all_df, df_dict = read_csv_files()
 
 # export dataframes to json
-from os import path, mkdir
+print(df_dict['airports'])
 
-if not path.isdir("json_data"):
-    mkdir("json_data")
-airport_df.to_json(r"./json_data/airport.json")
+def export_to_json():
+    if not os.path.isdir("json_data"):
+        mkdir("json_data")
+    for key in df_dict:
+        val = df_dict[key]
+        file = f"./json_data/{key}.json"
+        val.to_json(file)
 
 
-# dbconnection with sqlalchemy
-from sqlalchemy import create_engine
-engine = create_engine('sqlite:///database.db', echo=True)
-sqlite_connection = engine.connect()
-airport_sqlite_table = "airports"
-
-# write data into database
-airport_df.to_sql(airport_sqlite_table, sqlite_connection,if_exists='fail')
-sqlite_connection.close() # close db
+# export file to json
+export_to_json()
 
 # plot some data
-import matplotlib.pyplot as plt
 
-plt.plot(airport_df["type"], airport_df["name"])
-plt.show()
+# plt.plot(airport_df["type"], airport_df["name"])
+# plt.show()
 
-print(airport_df.to_html())
+# print(airport_df.to_html())

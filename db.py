@@ -2,6 +2,7 @@
 from sqlalchemy import create_engine, select, MetaData, Table, Column, Integer, String
 from dotenv import load_dotenv
 import os
+import pandas as pd
 
 load_dotenv()  # take environment variables from .env.
 MYSQL_USER = os.getenv('MYSQL_USER', 'user')
@@ -17,8 +18,11 @@ engine = create_engine(
     echo=True, pool_recycle=3600)
 connection = engine.connect()
 metadata = MetaData()
-ap = Table('airports', metadata, Column('id', Integer(), primary_key=True))
-metadata.create_all(engine)
+
+def create_table(table_name, data_frame):
+    if(isinstance(data_frame, pd.DataFrame)):
+        result = data_frame.to_sql(table_name, connection, if_exists='fail')
+    metadata.create_all(engine)
 
 
 class Airport:
