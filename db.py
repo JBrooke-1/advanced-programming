@@ -15,13 +15,13 @@ print(db_val)
 
 engine = create_engine(
     db_val,
-    echo=True, pool_recycle=3600)
+    echo=True)
 connection = engine.connect()
 metadata = MetaData()
 
 def create_table(table_name, data_frame):
     if(isinstance(data_frame, pd.DataFrame)):
-        result = data_frame.to_sql(table_name, connection, if_exists='fail')
+        result = data_frame.to_sql(table_name, connection, if_exists='append')
     metadata.create_all(engine)
 
 

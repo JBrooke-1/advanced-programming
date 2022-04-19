@@ -43,6 +43,15 @@ def export_to_json():
 # export file to json
 export_to_json()
 
+# populate the database 
+def populate_database():
+      for key in df_dict:
+        val = df_dict[key]
+        db.create_table(key, val)
+        print(f"{key} table has been created successfully")
+
+populate_database()
+
 # plot some data
 
 # plt.plot(airport_df["type"], airport_df["name"])
