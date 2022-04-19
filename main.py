@@ -16,8 +16,6 @@ if not path.isdir("json_data"):
     mkdir("json_data")
 airport_df.to_json(r"./json_data/airport.json")
 
-# connect to sqllite, a built in python module
-import sqlite3
 
 # dbconnection with sqlalchemy
 from sqlalchemy import create_engine

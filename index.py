@@ -1,4 +1,6 @@
+from this import d
 from flask import Flask
+import db
 
 app = Flask(__name__)
 
@@ -13,10 +15,12 @@ def welcome():
 
 @app.route("/airports")
 def get_airports():
-    
-    return """
-            <p>This page has airport information </p>
-           """
+    metadata = db.MetaData(bind=None)
+    airport = db.Table("airports", metadata, autoload=True, autoload_with=db.engine)
+    select_data = db.select(airport)
+    rp = db.connection.execute(select_data)
+    result = rp.fetchall()
+    return result
 
 
 if __name__ == "__index__":
