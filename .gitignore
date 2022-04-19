@@ -22,4 +22,4 @@ venv.bak/
 # local files
 data/
 json_data/
-
+*.db

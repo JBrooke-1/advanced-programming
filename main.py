@@ -13,3 +13,10 @@ from os import path, mkdir
 if not path.isdir('json_data'):
     mkdir('json_data')
 airport_df.to_json(r'./json_data/airport.json')
+
+# connect to sqllite, a built in python module
+import sqlite3
+#create db connection
+conn = sqlite3.connect('data.db')
+# execute some sql command
+c = conn.cursor()
