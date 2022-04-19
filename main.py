@@ -19,10 +19,15 @@ airport_df.to_json(r"./json_data/airport.json")
 # connect to sqllite, a built in python module
 import sqlite3
 
-# create db connection
-conn = sqlite3.connect("data.db")
-# execute some sql command
-c = conn.cursor()
+# dbconnection with sqlalchemy
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///database.db', echo=True)
+sqlite_connection = engine.connect()
+airport_sqlite_table = "airports"
+
+# write data into database
+airport_df.to_sql(airport_sqlite_table, sqlite_connection,if_exists='fail')
+sqlite_connection.close() # close db
 
 # plot some data
 import matplotlib.pyplot as plt
