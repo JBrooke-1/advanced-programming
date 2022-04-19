@@ -7,3 +7,9 @@ import pandas as pd
 airport_df = pd.read_csv("./data/airports.csv")
 airport_frequencies_df = pd.read_csv("./data/airport-frequencies.csv")
 runways_df = pd.read_csv("./data/runways.csv")
+
+# export dataframes to json
+from os import path, mkdir
+if not path.isdir('json_data'):
+    mkdir('json_data')
+airport_df.to_json(r'./json_data/airport.json')
