@@ -1,5 +1,4 @@
-from this import d
-from flask import Flask
+from flask import Flask, render_template
 import db
 
 app = Flask(__name__)
@@ -18,9 +17,14 @@ def get_airports():
     metadata = db.MetaData(bind=None)
     airport = db.Table("airports", metadata, autoload=True, autoload_with=db.engine)
     select_data = db.select(airport)
+
+    # all datas from the database
     rp = db.connection.execute(select_data)
     result = rp.fetchall()
-    return result
+
+    # get all columns in this table
+    cols = airport.columns
+    return render_template("table.html", tables=list(result), title="airport data")
 
 
 if __name__ == "__index__":
