@@ -60,31 +60,9 @@ def insert_data(table_name, data_frame, filepath="./data"):
         )
         connection.execute(sql)
 
-
 def create_tables(table_name, df):
     if isinstance(df, pd.DataFrame):
-        columns = df.dtypes.to_dict()
-        print(columns)
-        for key, val in columns.items():
-            print(key, val)
-            if is_string_dtype(val):
-                columns[key] = "varchar(255)"
-            else:
-                if val == np.float64:
-                    columns[key] = "float"
-                elif val == np.int64:
-                    columns[key] = "int"
-                else:
-                    print("error datatype not found")
-                    return
-        print(columns)
-        final_column = ""
-        for key, val in columns.items():
-            if key != list(columns)[-1]:
-                final_column += f"{key} {val},\n"
-            else:
-                final_column += f"{key} {val}"
-        print(final_column)
+        final_column = format_columns(df)
         sql = text(
             f"""
             CREATE TABLE IF NOT EXISTS `{table_name}`
@@ -95,6 +73,31 @@ def create_tables(table_name, df):
         )
         print(sql)
         connection.execute(sql)
+
+def format_columns(df):
+    columns = df.dtypes.to_dict()
+    print(columns)
+    for key, val in columns.items():
+        print(key, val)
+        if is_string_dtype(val):
+            columns[key] = "varchar(255)"
+        else:
+            if val == np.float64:
+                columns[key] = "float"
+            elif val == np.int64:
+                columns[key] = "int"
+            else:
+                print("error datatype not found")
+                return
+    print(columns)
+    final_column = ""
+    for key, val in columns.items():
+        if key != list(columns)[-1]:
+            final_column += f"{key} {val},\n"
+        else:
+            final_column += f"{key} {val}"
+    print(final_column)
+    return final_column
 
 
 class Airport:
