@@ -12,6 +12,7 @@ from pathlib import Path
 import logging
 import threading
 
+
 def read_csv_files(d_path="./data"):
     dfs_only = []
     dfs_dict = {}
@@ -29,6 +30,7 @@ def read_csv_files(d_path="./data"):
 
 all_df, df_dict = read_csv_files()
 
+
 def export_to_json():
     if not os.path.isdir("json_data"):
         mkdir("json_data")
@@ -40,6 +42,14 @@ def export_to_json():
 
 # export file to json
 export_to_json()
+
+# create all trables
+def create_tables():
+    for key in df_dict:
+        val = df_dict[key]
+        print(f"{key} : {val}")
+        db.create_tables(key, val)
+
 
 # populate the database
 def populate_database():
@@ -57,7 +67,7 @@ def populate_database():
         logging.info("Main    : thread %d done", index)
 
 
-populate_database()
+create_tables()
 
 # plot some data
 

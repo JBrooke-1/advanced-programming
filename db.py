@@ -60,6 +60,7 @@ def insert_data(table_name, data_frame, filepath="./data"):
         )
         connection.execute(sql)
 
+# function to create table if they are not yet created
 def create_tables(table_name, df):
     if isinstance(df, pd.DataFrame):
         final_column = format_columns(df)
@@ -74,6 +75,7 @@ def create_tables(table_name, df):
         print(sql)
         connection.execute(sql)
 
+# function to format column to match sql dtype
 def format_columns(df):
     columns = df.dtypes.to_dict()
     print(columns)
