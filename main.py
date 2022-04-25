@@ -11,7 +11,7 @@ import os
 from pathlib import Path
 import logging
 import threading
-
+import time
 
 def read_csv_files(d_path="./data"):
     dfs_only = []
@@ -57,9 +57,11 @@ def populate_database():
     for key in df_dict:
         val = df_dict[key]
         print(f"{key} : {val}")
-        x = threading.Thread(target=db.create_tables, args=(key, val), daemon=True)
-        x.start()
-        threads.append(x)
+        db.insert_data(key, val)
+        # x = threading.Thread(target=db.insert_data, args=(key, val), daemon=True)
+        # x.start()
+        # threads.append(x)
+        time.sleep(0.1)
 
     for index, thread in enumerate(threads):
         logging.info("Main    : before joining thread %d.", index)
@@ -68,7 +70,7 @@ def populate_database():
 
 
 create_tables()
-
+populate_database()
 # plot some data
 
 # plt.plot(airport_df["type"], airport_df["name"])

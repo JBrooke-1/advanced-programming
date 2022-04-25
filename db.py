@@ -43,22 +43,28 @@ def create_table_and_insert_data(table_name, data_frame):
 def insert_data(table_name, data_frame, filepath="./data"):
     if isinstance(data_frame, pd.DataFrame):
         columns = list(data_frame.columns)
+        final_columns = ""
+        for i in columns:
+            if i != columns[-1]:
+                final_columns += f"{i}, \n"
+            else:
+                final_columns += f"{i}"
         filepath = f"./data/{table_name}.csv"
-        # create a string from the columns that contains data
-        column_string = str(columns).replace("[", "(").replace("]", ")")
-        print(column_string)
+        print(final_columns)
         # create the table if it does not exist
         # create_table(table_name, column_string)
         sql = text(
             f"""
             LOAD DATA LOCAL INFILE '{filepath}' 
-            INTO TABLE {table_name}
-            FIELDS TERMINATED BY ','
-            IGNORE 1 LINES 
-            {column_string}
+            INTO TABLE `{table_name}`
+            (
+                {final_columns}
+            );
             """
         )
+        print(sql)
         connection.execute(sql)
+
 
 # function to create table if they are not yet created
 def create_tables(table_name, df):
@@ -69,11 +75,12 @@ def create_tables(table_name, df):
             CREATE TABLE IF NOT EXISTS `{table_name}`
             (
               {final_column}
-            )
+            );
             """
         )
         print(sql)
         connection.execute(sql)
+
 
 # function to format column to match sql dtype
 def format_columns(df):
