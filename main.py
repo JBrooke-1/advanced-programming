@@ -18,18 +18,19 @@ def read_csv_files(d_path="./data"):
         dirs = [os.path.join(d_path, f) for f in os.listdir(d_path)]
         print(dirs)
         for file in dirs:
-            if file.endswith('.csv'):
+            if file.endswith(".csv"):
                 val = pd.read_csv(file)
                 dfs_only.append(val)
                 key = Path(file).stem
-                dfs_dict[key]=val
+                dfs_dict[key] = val
         return pd.concat(dfs_only), dfs_dict
 
 
 all_df, df_dict = read_csv_files()
 
 # export dataframes to json
-print(df_dict['airports'])
+print(df_dict["airports"])
+
 
 def export_to_json():
     if not os.path.isdir("json_data"):
@@ -43,12 +44,13 @@ def export_to_json():
 # export file to json
 export_to_json()
 
-# populate the database 
+# populate the database
 def populate_database():
-      for key in df_dict:
+    for key in df_dict:
         val = df_dict[key]
-        db.create_table(key, val)
+        db.insert_data(key, val)
         print(f"{key} table has been created successfully")
+
 
 populate_database()
 
