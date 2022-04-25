@@ -9,7 +9,8 @@ import pandas as pd
 import db
 import os
 from pathlib import Path
-
+import logging
+import threading
 
 def read_csv_files(d_path="./data"):
     dfs_only = []
@@ -28,10 +29,6 @@ def read_csv_files(d_path="./data"):
 
 all_df, df_dict = read_csv_files()
 
-# export dataframes to json
-print(df_dict["airports"])
-
-
 def export_to_json():
     if not os.path.isdir("json_data"):
         mkdir("json_data")
@@ -46,10 +43,18 @@ export_to_json()
 
 # populate the database
 def populate_database():
+    threads = list()
     for key in df_dict:
         val = df_dict[key]
-        db.insert_data(key, val)
-        print(f"{key} table has been created successfully")
+        print(f"{key} : {val}")
+        x = threading.Thread(target=db.create_tables, args=(key, val), daemon=True)
+        x.start()
+        threads.append(x)
+
+    for index, thread in enumerate(threads):
+        logging.info("Main    : before joining thread %d.", index)
+        thread.join()
+        logging.info("Main    : thread %d done", index)
 
 
 populate_database()
