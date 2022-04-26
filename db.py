@@ -40,7 +40,7 @@ def create_table_and_insert_data(table_name, data_frame):
         print("error you need to pass in dataframe")
 
 
-def insert_data(table_name, data_frame, filepath="./data"):
+def insert_data(table_name, data_frame, filepath="./data_cleaned"):
     if isinstance(data_frame, pd.DataFrame):
         columns = list(data_frame.columns)
         final_columns = ""
@@ -49,7 +49,7 @@ def insert_data(table_name, data_frame, filepath="./data"):
                 final_columns += f"{i},"
             else:
                 final_columns += f"{i}"
-        filepath = f"./data/{table_name}.csv"
+        filepath = f"{filepath}/{table_name}.csv"
         print(final_columns)
         # create the table if it does not exist
         # create_table(table_name, column_string)

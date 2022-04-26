@@ -10,6 +10,35 @@ import os
 from pathlib import Path
 import logging
 import time
+import shutil
+
+
+def clean_data(d_path="./data", c_path="./data_cleaned"):
+    # create cleaned file path if not exist already
+    if not os.path.isdir(c_path):
+        os.makedirs(c_path)
+
+        # copy files from data folder to new folder
+        if os.path.isdir(d_path):
+            for f_name in os.listdir(d_path):
+                dest_path = c_path + "/" + f_name
+                s_path = d_path + "/" + f_name
+                print(dest_path, s_path)
+                if os.path.isfile(s_path):
+                    shutil.copy(s_path, dest_path)
+                    print(f"copied {s_path} to {dest_path}")
+
+        if os.path.isdir(c_path):
+            dirs = [os.path.join(c_path, f) for f in os.listdir(c_path)]
+            for file in dirs:
+                print(file)
+                if file.endswith(".csv"):
+                    with open(file, "r+", encoding="utf-8") as csv_file:
+                        content = csv_file.read()
+                    with open(file, "w+", encoding="utf-8") as csv_file:
+                        csv_file.write(content.replace('"', ''))
+                    csv_file.close()
+
 
 def read_csv_files(d_path="./data"):
     dfs_only = []
@@ -26,6 +55,7 @@ def read_csv_files(d_path="./data"):
         return pd.concat(dfs_only), dfs_dict
 
 
+clean_data()
 all_df, df_dict = read_csv_files()
 
 
@@ -42,6 +72,8 @@ def export_to_json():
 export_to_json()
 
 # create all trables
+
+
 def create_tables():
     for key in df_dict:
         val = df_dict[key]
