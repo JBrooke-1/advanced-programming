@@ -26,6 +26,5 @@ def get_airports():
     cols = airport.columns
     return render_template("table.html", tables=list(result), title="airport data")
 
-
 if __name__ == "__index__":
     app.run(debug=True)  # enable debug mode so it listen on port when change is applied
