@@ -3,14 +3,12 @@ STEP1: load the initial data set
 which consists of three CSV files 
 and translate it into JSON format
 """
-import matplotlib.pyplot as plt
 from os import path, mkdir
 import pandas as pd
 import db
 import os
 from pathlib import Path
 import logging
-import threading
 import time
 
 def read_csv_files(d_path="./data"):
@@ -71,9 +69,3 @@ def populate_database():
 
 create_tables()
 populate_database()
-# plot some data
-
-# plt.plot(airport_df["type"], airport_df["name"])
-# plt.show()
-
-# print(airport_df.to_html())
