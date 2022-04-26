@@ -46,7 +46,7 @@ def insert_data(table_name, data_frame, filepath="./data"):
         final_columns = ""
         for i in columns:
             if i != columns[-1]:
-                final_columns += f"{i}, \n"
+                final_columns += f"{i},"
             else:
                 final_columns += f"{i}"
         filepath = f"./data/{table_name}.csv"
@@ -57,6 +57,9 @@ def insert_data(table_name, data_frame, filepath="./data"):
             f"""
             LOAD DATA LOCAL INFILE '{filepath}' 
             INTO TABLE `{table_name}`
+            FIELDS TERMINATED BY ','
+            LINES TERMINATED BY '\n'
+            IGNORE 1 LINES
             (
                 {final_columns}
             );
