@@ -49,9 +49,13 @@ def draw_small_airport_freq():
     avg =db.connection.execute(db.text(sql_avg))
     avg_val = avg.fetchall()[0][0]
 
-    plt.hist(x=[result[0] for result in results], bins=bins, edgecolor="yellow", color="green")
-    plt.xlim(min_val, avg_val + bin_width*5)
+    # added visualization for historgram
+    counts, edges, bars = plt.hist(x=[result[0] for result in results], bins=400, edgecolor="yellow", color="green")
+    plt.xlim(100, avg_val + bin_width)
+    plt.bar_label(bars)
     plt.title("communication frequencies used by small_airports")
+    plt.xlabel('Frequencies (mhz)')
+    plt.ylabel('Numbers of counts')
     plt.show()
 
 
