@@ -5,7 +5,7 @@ import io
 import db
 
 
-def draw_airport():
+def draw_small_airport_freq():
     sql = """
         SELECT frequency_mhz, airport_ref FROM db.`airport-frequencies`
         JOIN db.airports ON db.airports.id=db.`airport-frequencies`.airport_ref
@@ -55,4 +55,4 @@ def draw_airport():
     plt.show()
 
 
-draw_airport()
+draw_small_airport_freq()
